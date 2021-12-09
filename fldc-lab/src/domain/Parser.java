@@ -2,6 +2,7 @@ package domain;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Parser {
     private final Grammar grammar;
@@ -125,5 +126,29 @@ public class Parser {
             }
         }
         return nestedMap;
+    }
+
+    public List<Map<List<String>, List<List<String>>>> colCanLR() {
+        List<Map<List<String>, List<List<String>>>> result = new ArrayList<>();
+        result.add(clone(closureLR("S' -> .S")));
+        boolean ok = true;
+        while(ok) {
+            ok = false;
+            List<Map<List<String>, List<List<String>>>> filteredResult = new ArrayList<>(result);
+            for (Map<List<String>, List<List<String>>> state : filteredResult) {
+                List<String> concatenated = Stream.concat(grammar.nonTerminals.stream(), grammar.terminals.stream()).collect(Collectors.toList());
+                for (String element: concatenated) {
+                    Map<List<String>, List<List<String>>> goToElem = clone(goTo(state, element));
+                    if(!goToElem.isEmpty() && !included(result, goToElem)){
+                        result.add(goToElem);
+                        ok = true;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    private boolean included(List<Map<List<String>, List<List<String>>>> result, Map<List<String>, List<List<String>>> goToElem) {
+        return result.stream().anyMatch((listOfStates) -> listOfStates.entrySet().containsAll(goToElem.entrySet()));
     }
 }

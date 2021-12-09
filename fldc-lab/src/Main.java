@@ -29,7 +29,7 @@ public class Main {
                     System.out.println(parser.goTo(parser.closureLR("S' -> .S"), input));
                     break;
                 case 3:
-//                    System.out.println(parser.colCanLR());
+                    System.out.println(parser.colCanLR());
                     break;
                 case 4:
 //                    System.out.println(parser.createLRTable(parser.colCanLR()));

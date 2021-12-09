@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class Grammar {
-    private List<String> nonTerminals; //non-terminals (starting states?)
-    private List<String> terminals; // terminals (check if it is alphabet?)
-    private String startingSymbol; //starting symbol
+    public List<String> nonTerminals; //non-terminals (starting states?)
+    public List<String> terminals; // terminals (check if it is alphabet?)
+    public String startingSymbol; //starting symbol
     public Map<ArrayList<String>, ArrayList<List<String>>> productionRules; // production rules
 
     public Grammar() {
