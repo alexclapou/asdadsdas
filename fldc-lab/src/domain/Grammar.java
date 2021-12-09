@@ -9,7 +9,7 @@ public class Grammar {
     private List<String> nonTerminals; //non-terminals (starting states?)
     private List<String> terminals; // terminals (check if it is alphabet?)
     private String startingSymbol; //starting symbol
-    private Map<ArrayList<String>, ArrayList<List<String>>> productionRules; // production rules
+    public Map<ArrayList<String>, ArrayList<List<String>>> productionRules; // production rules
 
     public Grammar() {
         this.productionRules = new HashMap<>();

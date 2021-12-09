@@ -26,7 +26,7 @@ public class Main {
                     System.out.println("Input symbol:");
                     scan.nextLine();
                     input = scan.nextLine();
-//                    System.out.println(parser.goTo(parser.closureLR("S' -> .S"), input));
+                    System.out.println(parser.goTo(parser.closureLR("S' -> .S"), input));
                     break;
                 case 3:
 //                    System.out.println(parser.colCanLR());

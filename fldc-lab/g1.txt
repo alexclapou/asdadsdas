@@ -2,6 +2,6 @@ N = S A B
 E = a b c d
 S = S
 P =
-S -> a A
+S -> a A | B
 A -> b A A | B
 B -> d | c
