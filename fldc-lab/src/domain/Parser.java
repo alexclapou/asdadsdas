@@ -92,12 +92,11 @@ public class Parser {
         for (Map.Entry element : productionscopy.entrySet()) {
             List<List<String>> values = (List<List<String>>) element.getValue();
             List<String> key = (List<String>) element.getKey();
-            System.out.println(values);
+            List<List<String>> newValues = new ArrayList<>();
             boolean symbolFound = false;
             for(var value: values){
                 for(int i = 0; i < value.size(); i++) {
                     if (value.get(i).equals("."+symbol)) {
-                        System.out.println(values.get(i));
                         value.set(i, value.get(i).substring(1));
                         symbolFound = true;
                         if (i == value.size() - 1) {
@@ -105,15 +104,14 @@ public class Parser {
                         } else {
                             value.set(i + 1, "." + value.get(i + 1));
                         }
-                        break;
+                        newValues.add(value);
                     }
                 }
             }
             if(symbolFound) {
-                System.out.println(values);
                 String closureString = key.get(0) + " ->";
                 boolean or = false;
-                for (var value : values) {
+                for (var value : newValues) {
                     if (or)
                         closureString += " |";
                     or = false;
