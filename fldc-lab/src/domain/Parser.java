@@ -10,6 +10,7 @@ public class Parser {
     public Parser(Grammar grammar) {
         this.grammar = grammar;
     }
+
 //afisare value dupa fiecare add
     public Map<List<String>, List<List<String>>> closureLR(String input) {
         Map<List<String>, List<List<String>>> P = new HashMap<>();
@@ -26,17 +27,20 @@ public class Parser {
         }
         //split la lista dupa |
         P.put(key, value);
-//        System.out.println(value);
         int size = 0;
         int index = -1;
         String nonT;
 //        pana aici o sa fie {[S]:[[.A, B]}
-        while (size < P.size()) {
-            size = P.size();
+        //pana aici e ok
+
+
+
+        while (size <getSizeOfMap(P)) {
+            size = getSizeOfMap(P);
             Map<List<String>, List<List<String>>> filteredP = clone(P);
             for (Map.Entry element : filteredP.entrySet()) {
                 value = (List<List<String>>) element.getValue();
-                // value o sa fie o lista de liste de strings [[.A, B]]
+                // value o sa fie o lista de liste de strings [[b .A A]]
                 for (List<String> s : value) {
                     index = -1;
                     for(String character: s){
@@ -54,12 +58,23 @@ public class Parser {
                         for (Map.Entry elementB : filteredB.entrySet()) {
                             List<String> keyB = (List<String>) elementB.getKey();
                             List<List<String>> valueB = (List<List<String>>) elementB.getValue();
-                            if (!P.containsKey(keyB)) {
-                                for(var q: valueB)
-                                    q.set(0, "."+q.get(0));
-                                P.put(keyB, valueB);
-//                                System.out.println(valueB);
+                            for(var q: valueB)
+                                q.set(0, "."+q.get(0));
+                            List<List<String>> oldValue = (List<List<String>>) element.getValue();
+                            var X = clone(P);
+                            //check if exist already
+                            for (Map.Entry oldelement : X.entrySet()) {
+                                List<String> oldkey = (List<String>) oldelement.getKey();
+                                List<String> keyy = (List<String>) element.getKey();
+                                if(keyB.get(0).equals(oldkey.get(0))){
+                                    for(var qqq: (List<List<String>>)oldelement.getValue()){
+                                        if(!valueB.contains(qqq)){
+                                            valueB.add(qqq);
+                                        }
+                                    }
+                                }
                             }
+                            P.put(keyB, valueB);
                         }
                     }
                 }
@@ -67,6 +82,17 @@ public class Parser {
         }
         return P;
     }
+
+    public int getSizeOfMap(Map<List<String>, List<List<String>>> m){
+        int c = 0;
+        for (Map.Entry element : m.entrySet()) {
+            List<List<String>> liststring = (List<List<String>>) element.getValue();
+            for(var q: liststring)
+                c += q.size();
+        }
+        return c;
+    }
+
     public static Map<List<String>, List<List<String>>> clone(Map<List<String>, List<List<String>>> original)
     {
         Map<List<String>, List<List<String>>> copy = new HashMap<>();
@@ -106,6 +132,7 @@ public class Parser {
                             value.set(i + 1, "." + value.get(i + 1));
                         }
                         newValues.add(value);
+                        break;
                     }
                 }
             }
@@ -131,6 +158,7 @@ public class Parser {
     public List<Map<List<String>, List<List<String>>>> colCanLR() {
         List<Map<List<String>, List<List<String>>>> result = new ArrayList<>();
         result.add(clone(closureLR("S' -> .S")));
+        System.out.println("S  ---> " + closureLR("S' -> .S"));
         boolean ok = true;
         while(ok) {
             ok = false;
@@ -140,6 +168,7 @@ public class Parser {
                 for (String element: concatenated) {
                     Map<List<String>, List<List<String>>> goToElem = clone(goTo(state, element));
                     if(!goToElem.isEmpty() && !included(result, goToElem)){
+                        System.out.println(state + "  goto("+element+")    ------>   " + goToElem);
                         result.add(goToElem);
                         ok = true;
                     }
